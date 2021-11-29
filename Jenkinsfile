@@ -20,4 +20,10 @@ sh '''
              echo "ID is $IDN"
     echo "$USERNAME is my name"
 '''
+ 
+    def config = new ConfigSlurper().parse(new File('config.groovy').toURL())
+assert ['name'] == config.flatten().keySet().collect {it as String} 
+    for (String name: config.flatten().keySet()) {
+    println name
+}
     }
