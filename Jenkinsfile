@@ -21,9 +21,29 @@ sh '''
     echo "$USERNAME is my name"
 '''
  
-    def config = new ConfigSlurper().parse(new File('config.groovy').toURL())
-assert ['name'] == config.flatten().keySet().collect {it as String} 
-    for (String name: config.flatten().keySet()) {
-    println name
+//     def config = new ConfigSlurper().parse(new File('config.groovy').toURL())
+// assert ['name'] == config.flatten().keySet().collect {it as String} 
+//     for (String name: config.flatten().keySet()) {
+//     println name
+// }
+    def varMap = [:]
+varMap["name"] = [] 
+
+def binding = new Binding(varMap)
+def shell = new GroovyShell(binding)
+
+def function2 = { name ->
+    name.each { println "test item: ${it}" }
 }
+
+// ------ main
+
+// load Config and evaluate it
+def configText = new File(args[0]).getText()
+shell.evaluate(configText)
+
+def name = varMap["name"] 
+
+
+function2(name)
     }
